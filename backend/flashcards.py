@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import time
 
@@ -113,6 +114,22 @@ class FlashcardApp:
             return
         category = questionary.select("Choose a category:", choices=categories).ask()
         self.quiz_by_category(category)
+
+    def select_json_file(self):
+        json_files = [f for f in os.listdir(".") if f.endswith(".json")]
+        json_files.append("Create new JSON file")
+        selected_file = questionary.select(
+            "Choose a JSON file or create a new one:", choices=json_files
+        ).ask()
+        if selected_file == "Create new JSON file":
+            new_filename = questionary.text("Enter new JSON filename:").ask()
+            return (
+                new_filename
+                if new_filename.endswith(".json")
+                else new_filename + ".json"
+            )
+        else:
+            return selected_file
 
     def run(self):
         selected_json = self.select_json_file()
