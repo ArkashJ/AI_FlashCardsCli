@@ -8,6 +8,7 @@ import torch
 from categorize_data import (categorize_flashcards,
                              load_flashcards_from_category,
                              save_categorized_flashcards_to_json)
+from colorama import Fore, Style
 from sentence_transformers import SentenceTransformer, util
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
@@ -97,7 +98,7 @@ class FlashcardApp:
             start_time = time.time()
             user_answer = input("Your answer: ")
             elapsed = time.time() - start_time
-            print(f"Time taken: {elapsed:.2f} seconds")
+            print(f"{Fore.GREEN}Time taken:{Style.RESET_ALL} {elapsed:.2f} seconds")
             similarity = self.compute_similarity(user_answer, flashcard.answer)
             correct = similarity >= 0.7
             if correct:
@@ -115,7 +116,9 @@ class FlashcardApp:
         if not categories:
             print("No flashcards available. Please add some flashcards first.")
             return
-        category = questionary.select("Choose a category:", choices=categories).ask()
+        category = questionary.select(
+            f"{Fore.CYAN}Choose a category:{Style.RESET_ALL}", choices=categories
+        ).ask()
         self.quiz_by_category(category)
         categories = categorize_flashcards(self.flashcards)
         save_categorized_flashcards_to_json(categories)
@@ -165,14 +168,21 @@ class FlashcardApp:
             print(f"Status: {flashcard.current_status()}\n")
 
     def print_flashcards(self):
-        # randomly print the cards for a review
         random.shuffle(self.flashcards)
         for flashcard in self.flashcards:
-            # Add spaces for better readability and separation
-            print(
-                f"Category: {flashcard.category} \n \n - Question: {flashcard.question} \n"
-            )
-            print(f"Answer: {flashcard.answer} \n")
+            print(f"\n{Fore.CYAN}Category: {Style.RESET_ALL}{flashcard.category}")
+            print(f"{Fore.GREEN}Question: {Style.RESET_ALL}{flashcard.question}")
+            print(f"{Fore.MAGENTA}Answer: {Style.RESET_ALL}{flashcard.answer}")
+
+    # def print_flashcards(self):
+    #     # randomly print the cards for a review
+    #     random.shuffle(self.flashcards)
+    #     for flashcard in self.flashcards:
+    #         # Add spaces for better readability and separation
+    #         print(
+    #             f"Category: {flashcard.category} \n \n - Question: {flashcard.question} \n"
+    #         )
+    #         print(f"Answer: {flashcard.answer} \n")
 
     def run(self):
         selected_json = self.select_json_file()
