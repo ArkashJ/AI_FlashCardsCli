@@ -5,6 +5,9 @@ import time
 
 import questionary
 import torch
+from categorize_data import (categorize_flashcards,
+                             load_flashcards_from_category,
+                             save_categorized_flashcards_to_json)
 from sentence_transformers import SentenceTransformer, util
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
