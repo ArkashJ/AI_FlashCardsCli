@@ -1,0 +1,80 @@
+[
+    {
+        "question": "Where is data arranged, talk about disk I/O, whats the role of DBMS",
+        "answer": "data is arranged in disk units called blocks of size 4k-8k usually. Disk I/O is fairly expensive and a DBMS tries to minimize it as much as possible",
+        "category": "Disk Access",
+        "performance": []
+    },
+    {
+        "question": "Explain the architecture of a database. What does the logical layer do and what do the terms records, fields and collections mean?",
+        "answer": "A database has 2 layers - storage and logical. Logical layer is a mapping between the logical schema and physcial representations of data. Field means value, record is a group of fileds, and collection is a group of records - all used to be model neutral. The storage layer takes care of storing and retrieving data while the logical llayer is an abstraction",
+        "category": "Disk Access",
+        "performance": []
+    },
+    {
+        "question": "How does the DBMS use a filesystem? What is the role of metadata in the mapping and what the is the data allocation of each type like?",
+        "answer": "The DBMS may use the filesystem or bypass it and use its own disk manager. In either case the DBMS uses units called pages that have a different size than blocks and used for performance tuning. Different metadata is used for different approaches, going from per-record metadata to per collection. char = 1 byte, integer data = 4 bytes, offset - 2bytes",
+        "category": "Disk Access",
+        "performance": []
+    },
+    {
+        "question": "Would you use fixed or variable length records? What are the pros and cons of using each one?",
+        "answer": "Fixed length records always allocate the max possible length. An advantage is that you need less metadata because each record has the same length. A given field is in a consistent position with all records. Changing the field's value doesnt channge the record length. Thus changes dont require moving the record. However we waste space when fields are shorter than max length. Using variable length has the benefit of saving space when fields are shorter however require more metadata in order to determine the boundaries between records and locations of fields in a given record. Changing a field's value can change record length thus we need to move the record. It would be useful to have the latter over the former",
+        "category": "Disk Access",
+        "performance": []
+    },
+    {
+        "question": "Whats the format of fixed-length records?",
+        "answer": "If the field length is less than the max, use delimiters. to find the position of a field, use a per-collection metadata. Store the offset of each field. Delimiters are per-record metadata.",
+        "category": "Data Storage",
+        "performance": []
+    },
+    {
+        "question": "Whats the format of variable-length records?",
+        "answer": "One way was to terminate each field with a delimiter but that was ineefficient. Updating values was annoying and so was finding the start. Preceeding each character with its lenght was useful but changing the value was once again cumbersome. Thus we use offsets.",
+        "category": "Data Storage",
+        "performance": []
+    },
+    {
+        "question": "how do you represent null values in variable-length records",
+        "answer": "Add an out-of-band value for every data type but need to increase s size of most data types or reduce the range of possible values. Instead just use a special offset of -1.",
+        "category": "Data Storage",
+        "performance": []
+    },
+    {
+        "question": "whats an index structure?",
+        "answer": "its also known as a dictionary or a map. Faster and more easier to find a record based on a particular filed just get the key instead of scanning the entire collection. A given collection of records may have one clustered or primary index and nuumber of unclustered or secondary indices.",
+        "category": "Index Struct",
+        "performance": []
+    },
+    {
+        "question": "Whats a B-tree, explain its properties.",
+        "answer": "A B tree is of order m in which each node has at most 2m chilldren(for internal nodes 2m+1), m items at least (m+1 for internal nodes) and the root node is an exception which can have as few as 1 item. Its perfectly balanced. Like a BST but with more keys per node. Search compares key to the node. if the node's key is less than the e input key, keep moving forward. if you reach the end of this node, traverse its children. For update search for k until you reach a leaf. if leaf < 2m, add the new item to the left else split the node, divide it into 2m+1 items with the first m remaining in the original one, largest m in the new one and the middle going to the top.",
+        "category": "Index Struct",
+        "performance": []
+    },
+    {
+        "question": "What are pages in B- trees, efficiency and disk I/O concerns?",
+        "answer": "Each node corresponds to one page in the corresponding index file where each child pointer = page number. The high m is, the more efficient the tree is because it minimizes disk i?o. however if m is too larger, items wont fit on the page and stored in seperate overflow pages. Also the max number of nodes access <= tree_h + 1, making searching and insertion O(log_m n).",
+        "category": "Index Struct",
+        "performance": []
+    },
+    {
+        "question": "Whats a B+ tree?",
+        "answer": "data items are only found in leaf nodes, internal nodes only contain keys and child pointers and a key may be in a leaf and internal node. a big benefit is additional room for child pointers and it allows linking leaf nodes which is better for range queries.",
+        "category": "Index Struct",
+        "performance": []
+    },
+    {
+        "question": "Whats the differences in the B+tree algorithms?",
+        "answer": "When searching we keep going until we reach a leaf node even if the key is seen in an internal node. The first m items remain in the original node when splitting but all the remaining ones go in the new one including the middle item. The key of the middle is copied to the parent. Deletion involves looking at the node N and if it has fewer than m elements take elements from the sibling node with more than m items and add them or merge the sibling if it has only m items. if the key is also in the internal node, dont remove it internally.",
+        "category": "Index Struct",
+        "performance": []
+    },
+    {
+        "question": "What is hashing and what are the types?",
+        "answer": "We use hash tables to convert keys to page numbers. There's in-memory and on-disk hash tables. the first one is used to index into an array. need to deal with collisions using static or dynamic hashing. On-disk: hash value tells you which page the item should be on. becuase pages are large, each serves as a bucket to store multiple items and we need to deal with full buckets.",
+        "category": "Hash",
+        "performance": []
+    }
+]
