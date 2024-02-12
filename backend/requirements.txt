@@ -1,4 +1,3 @@
-c0.49292929ertifi==2024.2.2
 charset-normalizer==3.3.2
 ci-info==0.3.0
 click==8.1.7
