@@ -18,6 +18,7 @@
 - Add a score
 
 # Run this
+
 ```bash
 python3 -m venv venv
 cd backend
@@ -25,3 +26,12 @@ source venv/bin/activate
 pip install -r requirements.txt
 python3 flashcards.py
 ```
+
+# Functionality
+
+- Added spacy to download an english language model
+  - the model finds keywords in my questions and answers
+- Modified my print function to prompt the user for printing the answer after reading the question, printing the answer, showing keywords
+  and then asking the user if they want to continue
+- Added a function to calculate the score of the user
+- Added a function to shuffle the questions and answers
