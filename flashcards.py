@@ -10,9 +10,11 @@ from colorama import Fore, Style
 from sentence_transformers import SentenceTransformer, util
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from categorize_data import (categorize_flashcards,
-                             load_flashcards_from_category,
-                             save_categorized_flashcards_to_json)
+from categorize_data import (
+    categorize_flashcards,
+    load_flashcards_from_category,
+    save_categorized_flashcards_to_json,
+)
 
 # Load the spaCy model
 nlp = spacy.load("en_core_web_sm")

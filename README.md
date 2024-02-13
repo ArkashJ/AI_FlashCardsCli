@@ -33,6 +33,12 @@ docker build -t ai_flashcards:latest .
 docker run -it -p 4000:80 ai_flashcards
 ```
 
+To stop the container
+
+```bash
+docker stop ai_flashcards
+```
+
 # Functionality
 
 - Added spacy to download an english language model
