@@ -1,43 +1,19 @@
 [
     {
-        "question": "What happens if the log is too big",
-        "answer": "In leveling you get a big sorted array whereas there is a log for the lsm tree",
-        "category": "Architecture",
-        "performance": []
-    },
-    {
         "question": "How are compaction triggers working in lsm trees?",
         "answer": "Invoking the compaction trigger. You can customize it and change the space amplification using the age of the file.",
         "category": "Architecture",
         "performance": []
     },
     {
-        "question": "What is the data movement policy>",
-        "answer": "We use a round-robind fashion, minimum overlap with parent level and the file with most tombstones.",
+        "question": "What happens if the log is too big",
+        "answer": "In leveling you get a big sorted array whereas there is a log for the lsm tree",
         "category": "Architecture",
-        "performance": []
-    },
-    {
-        "question": "Compare the read costs of levelling vs tiering. Also look at the write costs. Assume you have bloom filters",
-        "answer": "Leveling: read cost - O(L.phi), O(T.L/B), Tiering: read cost- O(T.L.phi), O(L/B)",
-        "category": "Architecture",
-        "performance": []
-    },
-    {
-        "question": "Reading queries",
-        "answer": "Files are sorted, there is a sort-merge. Reads are efficient, you may have to read multiple levels. Bloom filters are optimzations, gives false positives but eliminates some of the I/O excesses",
-        "category": "Basics",
         "performance": []
     },
     {
         "question": "What is the data layout like?",
         "answer": "Classical model uses levelling",
-        "category": "Architecture",
-        "performance": []
-    },
-    {
-        "question": "What is the newer layout model?",
-        "answer": "Earlier we had eager merging which had good read performance and good space amplification however high write amplification. However now we use tiering and its a lazy model. Every run is sorted internally. The level itself is not sorted. There's T runs per level - thus it has a good ingestion performance but poor space amplification and read performance.",
         "category": "Architecture",
         "performance": []
     },
@@ -48,9 +24,33 @@
         "performance": []
     },
     {
+        "question": "Compare the read costs of levelling vs tiering. Also look at the write costs. Assume you have bloom filters",
+        "answer": "Leveling: read cost - O(L.phi), O(T.L/B), Tiering: read cost- O(T.L.phi), O(L/B)",
+        "category": "Architecture",
+        "performance": []
+    },
+    {
+        "question": "What are the best attributes of leveling versus tiering?",
+        "answer": "Leveling is read optimized while tiering is write optimized. Keeping the last level as the LSM level allows us to have fast range and point queries.",
+        "category": "Architecture",
+        "performance": []
+    },
+    {
         "question": "What is the process of compaction",
         "answer": "There is reads, writes to secondary storage, there is a latency spike. Therefore partial compaction came in.",
         "category": "Features",
+        "performance": []
+    },
+    {
+        "question": "What is the newer layout model?",
+        "answer": "Earlier we had eager merging which had good read performance and good space amplification however high write amplification. However now we use tiering and its a lazy model. Every run is sorted internally. The level itself is not sorted. There's T runs per level - thus it has a good ingestion performance but poor space amplification and read performance.",
+        "category": "Architecture",
+        "performance": []
+    },
+    {
+        "question": "Reading queries",
+        "answer": "Files are sorted, there is a sort-merge. Reads are efficient, you may have to read multiple levels. Bloom filters are optimzations, gives false positives but eliminates some of the I/O excesses",
+        "category": "Basics",
         "performance": []
     },
     {
@@ -66,15 +66,15 @@
         "performance": []
     },
     {
-        "question": "What are the best attributes of leveling versus tiering?",
-        "answer": "Leveling is read optimized while tiering is write optimized. Keeping the last level as the LSM level allows us to have fast range and point queries.",
-        "category": "Architecture",
-        "performance": []
-    },
-    {
         "question": "What are key ideas?",
         "answer": "Buffering ingestion, immutable files on storage, out-of-place updates & deletes, periodic data layout reorginzation",
         "category": "Basics",
+        "performance": []
+    },
+    {
+        "question": "What is the data movement policy>",
+        "answer": "We use a round-robind fashion, minimum overlap with parent level and the file with most tombstones.",
+        "category": "Architecture",
         "performance": []
     }
 ]

@@ -103,7 +103,7 @@ class FlashcardApp:
             start_time = time.time()
             user_answer = input("Your answer: ")
             elapsed = time.time() - start_time
-            print(f"{Fore.GREEN}Time taken:{Style.RESET_ALL} {elapsed:.2f} seconds")
+            print(f"Time taken: {elapsed:.2f} seconds")
             similarity = self.compute_similarity(user_answer, flashcard.answer)
             correct = similarity >= 0.7
             if correct:
@@ -123,8 +123,7 @@ class FlashcardApp:
             print("No flashcards available. Please add some flashcards first.")
             return
         category = questionary.select(
-            f"{Fore.CYAN}Choose a category:{Style.RESET_ALL}", choices=categories
-        ).ask()
+            f"Choose a category:", choices=categories).ask()
         self.quiz_by_category(category)
         categories = categorize_flashcards(self.flashcards)
         save_categorized_flashcards_to_json(categories)
@@ -180,7 +179,12 @@ class FlashcardApp:
         for flashcard in self.flashcards:
             print(f"\n{Fore.CYAN}Category: {Style.RESET_ALL}{flashcard.category}")
             print(f"{Fore.GREEN}Question: {Style.RESET_ALL}{flashcard.question}")
+            user_input = input("Press Enter to reveal the answer...")
             print(f"{Fore.MAGENTA}Answer: {Style.RESET_ALL}{flashcard.answer}")
+            # Prompt to move to the next question or exit the session
+            proceed = questionary.confirm("Move to the next question?").ask()
+            if not proceed:
+                break
 
     def run(self):
         selected_json = self.select_json_file()

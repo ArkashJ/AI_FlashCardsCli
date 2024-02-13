@@ -1,0 +1,26 @@
+[
+    {
+        "question": "What is the latency-completeness tradeoff?",
+        "answer": "Fundamental tradeoff in stream processing. If you emit results too early they are not complete and if you wait for completeness you have high latency",
+        "category": "Introduction",
+        "performance": []
+    },
+    {
+        "question": "Why do streams have disorder?",
+        "answer": "Disorder is common in logs, telemtry data and could be because of network delays, bugs, machines failures.",
+        "category": "Introduction",
+        "performance": []
+    },
+    {
+        "question": "How do you quantify disorder?",
+        "answer": "Disorder can be quantified as inversions, run, distance and interleaved. Inversions are cases where a pair of positions are out of order - giving a measure of sortedness. Distance is the distance between two points in an inversion while a run is the number of increasing runs in a stream. Interleaved is minimum number of sorted runs that can be interleaved to produce the stream.",
+        "category": "Introduction",
+        "performance": []
+    },
+    {
+        "question": "Explain stream processing in trill",
+        "answer": "Trill is a high performance query processor for streaming analytics used heavily in microsoft where all operators are in-order. The goal of this paper is to make trill more efficient by working with out-of-order streams.",
+        "category": "Introduction",
+        "performance": []
+    }
+]
