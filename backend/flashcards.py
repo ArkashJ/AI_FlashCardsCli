@@ -4,6 +4,7 @@ import random
 import time
 
 import questionary
+import spacy
 import torch
 from categorize_data import (
     categorize_flashcards,
@@ -13,6 +14,9 @@ from categorize_data import (
 from colorama import Fore, Style
 from sentence_transformers import SentenceTransformer, util
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+# Load the spaCy model
+nlp = spacy.load("en_core_web_sm")
 
 
 class Flashcard:
@@ -181,6 +185,11 @@ class FlashcardApp:
             print(f"{Fore.GREEN}Question: {Style.RESET_ALL}{flashcard.question}")
             user_input = input("Press Enter to reveal the answer...")
             print(f"{Fore.MAGENTA}Answer: {Style.RESET_ALL}{flashcard.answer}")
+            doc = nlp(flashcard.answer)
+            keywords = [
+                token.text for token in doc if token.pos_ in ["NOUN", "PROPN"]]
+
+            print(f"{Fore.YELLOW}Keywords: {Style.RESET_ALL}{keywords}")
             # Prompt to move to the next question or exit the session
             proceed = questionary.confirm("Move to the next question?").ask()
             if not proceed:
