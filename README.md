@@ -17,13 +17,20 @@
 - Add a timer
 - Add a score
 
-# Run this
+# Run this locally
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python3 flashcards.py
+```
+
+# Or you can use docker
+
+```bash
+docker build -t ai_flashcards:latest .
+docker run -it -p 4000:80 ai_flashcards
 ```
 
 # Functionality
