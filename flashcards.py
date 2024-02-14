@@ -2,6 +2,7 @@ import json
 import os
 import random
 import time
+from functools import lru_cache
 
 import questionary
 import spacy
@@ -85,14 +86,17 @@ class FlashcardApp:
         except FileNotFoundError:
             print("No saved flashcards found.")
 
+    @lru_cache
     def compute_similarity(self, user_answer, correct_answer):
         user_embedding = self.model.encode(user_answer, convert_to_tensor=True)
-        correct_embedding = self.model.encode(correct_answer, convert_to_tensor=True)
+        correct_embedding = self.model.encode(
+            correct_answer, convert_to_tensor=True)
         cosine_scores = util.pytorch_cos_sim(user_embedding, correct_embedding)
         return cosine_scores.item()
 
     def quiz_by_category(self, category):
-        category_flashcards = [fc for fc in self.flashcards if fc.category == category]
+        category_flashcards = [
+            fc for fc in self.flashcards if fc.category == category]
         if not category_flashcards:
             print(
                 f"No flashcards available for category: {category}. Please add some flashcards first."
@@ -101,7 +105,8 @@ class FlashcardApp:
         random.shuffle(category_flashcards)
         correct_answers = 0
         for flashcard in category_flashcards:
-            print(f"Category: {flashcard.category} - Question: {flashcard.question}")
+            print(
+                f"Category: {flashcard.category} - Question: {flashcard.question}")
             start_time = time.time()
             user_answer = input("Your answer: ")
             elapsed = time.time() - start_time
@@ -116,14 +121,16 @@ class FlashcardApp:
             flashcard.update_performance(correct)
             print(f"Status: {flashcard.current_status()}\n")
 
-        print(f"You got {correct_answers}/{len(self.flashcards)} correct answers.")
+        print(
+            f"You got {correct_answers}/{len(self.flashcards)} correct answers.")
 
     def quiz(self):
         categories = list(set(fc.category for fc in self.flashcards))
         if not categories:
             print("No flashcards available. Please add some flashcards first.")
             return
-        category = questionary.select(f"Choose a category:", choices=categories).ask()
+        category = questionary.select(
+            f"Choose a category:", choices=categories).ask()
         self.quiz_by_category(category)
         categories = categorize_flashcards(self.flashcards)
         save_categorized_flashcards_to_json(categories)
@@ -148,7 +155,8 @@ class FlashcardApp:
         file_path = "categorized_flashcards.json"
         category = questionary.select(
             "Choose a performance category:",
-            choices=["Mastered", "Correct but Needs Practice", "Needs More Work"],
+            choices=["Mastered", "Correct but Needs Practice",
+                     "Needs More Work"],
         ).ask()
         flashcards = load_flashcards_from_category(file_path, category)
 
@@ -161,7 +169,8 @@ class FlashcardApp:
         flashcard_objects = [Flashcard.from_dict(fc) for fc in flashcards]
         # You might need to adjust this part to fit how you want to quiz the user with these flashcards
         for flashcard in flashcard_objects:
-            print(f"Category: {flashcard.category} - Question: {flashcard.question}")
+            print(
+                f"Category: {flashcard.category} - Question: {flashcard.question}")
             user_answer = input("Your answer: ")
             similarity = self.compute_similarity(user_answer, flashcard.answer)
             correct = similarity >= 0.7
@@ -180,7 +189,8 @@ class FlashcardApp:
             user_input = input("Press Enter to reveal the answer...")
             print(f"{Fore.MAGENTA}Answer: {Style.RESET_ALL}{flashcard.answer}")
             doc = nlp(flashcard.answer)
-            keywords = [token.text for token in doc if token.pos_ in ["NOUN", "PROPN"]]
+            keywords = [
+                token.text for token in doc if token.pos_ in ["NOUN", "PROPN"]]
 
             print(f"{Fore.YELLOW}Keywords: {Style.RESET_ALL}{keywords}")
             # Prompt to move to the next question or exit the session
@@ -231,7 +241,8 @@ class FlashcardApp:
             elif action == "Quiz yourself":
                 self.quiz()
             elif action == "Write to a file":
-                file_name = questionary.text("Enter the file name to write to:").ask()
+                file_name = questionary.text(
+                    "Enter the file name to write to:").ask()
                 for flashcard in self.flashcards:
                     self.write_to_txt(flashcard, file_name)
                 print(f"Flashcards written to {file_name}")
