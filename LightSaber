@@ -1,0 +1,35 @@
+
+Category: Intro
+Question: What is the tradeoff in windowing aggregation
+Answer: Windowing aggregation is imperative for SPEs however there is a tradeoff in exploiting parallelism (at instruction/multi-core levels) and incremental computation (across overlapping windows and queries).
+
+
+Category: Intro
+Question: What do current systems do for window aggregation
+Answer: Current systems implement ad-hoc aggregation algorthims achieving high performance only for specific queries depending on the window definition and type of aggregation
+
+
+Category: Intro
+Question: Introduce lightsaber and the problem it solves
+Answer: Lightsaber is introduced as a stream processing engine that can generalize existing approaches for exploiting parallelism and incremental processing. (i) for p  parallel processing, lightsaber constructs a parallel aggregation tree tha exploits the parallelism of modern processors. The PAT divides window agg. into intermediate steps that enable use of both instruction level and task level parallelism. (ii) generate incremental code from PAT using a generalized aggregation graph (GAG) which encodes low level data dependencis required to produce aggregates ovet the stream.
+
+
+Category: Intro
+Question: Why is there a need for window aggregation
+Answer: Every growing amounts od data is produced from smart appliances, industrial applications and scientific facilities. In big data volumes throughput is a key performance metric and recent SPEs have been using multi-processing powers of modern CPUs. SPEs use window aggregations, where tumbling windows allows for standard query optimizations however with sliding windows there is a tension between techniques that use task and instrcution level parallelism and incremental processing, avoiding redundant computation across overlapping windows, however the latter creates data dependencies in CPU instructions making parallelism harder.
+
+
+Category: Competition
+Question: Explain competitors
+Answer: Systems are optimized for different workloads. Some use invertible functions to increase performance and to assess window impacts, we maximize number of concurrent queries. SoE and twoStacks are optimized for invertible and non-invertible functions. with multiple overlapping queries SlickDeque and SlideSide achieve highest performance while SlideSide is best for non-invertible cases. However there is no system optimized for all types of queries
+
+
+Category: Competition
+Question: Why is code generation a bottleneck?
+Answer: Recently there is a push to use query engines as code generators which is a non trivial problem. No algorithm exists when overlapping windows are aggregated incrementally, making it challenging because code generation must be expressive enough to generalize different state of the art approaches.
+
+
+Category: Contribution
+Question: What is the goal of the paper?
+Answer: Currently compilers implement an abstraction called stage to capture all cases under a unified interface. The paper introduces a model for window aggregation strategies to split window aggregation into intermediate steps, allowing them to reason about different aggregation strategies and their properties. Based on these steps, they can determine how to exploit SIMD and Multi-core parallelism. Also they work on multi-level parallel window agg. by using a Parallel Aggregation tree - each node is an execution task that performs intermediate aggregation, at the lowest level, the PAT aggregates individual tuples into partial results called panes which are subsequently consumed in the second level to produce a sequence of window fragment results. Finally, they propose a generalized aggregation graph that exploits incremental computation, presenting a simple interface to the code generator. The code generator removes unnecessary nodes.
+
